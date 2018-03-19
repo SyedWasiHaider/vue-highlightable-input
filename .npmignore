@@ -1,0 +1,11 @@
+.idea
+.vscode
+.DS_STORE
+node_modules
+.gitignore
+.npmignore
+.babelrc
+bundle.css
+dist
+example
+rollup.config.js

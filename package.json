@@ -1,41 +1,27 @@
 {
-  "name": "highlight-input",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
-  },
-  "dependencies": {
-    "vue": "^2.5.13"
-  },
-  "devDependencies": {
-    "@vue/cli-plugin-babel": "^3.0.0-beta.6",
-    "@vue/cli-plugin-eslint": "^3.0.0-beta.6",
-    "@vue/cli-service": "^3.0.0-beta.6",
-    "vue-template-compiler": "^2.5.13"
-  },
-  "babel": {
-    "presets": [
-      "@vue/app"
-    ]
-  },
-  "eslintConfig": {
-    "root": true,
-    "extends": [
-      "plugin:vue/essential",
-      "eslint:recommended"
-    ]
-  },
-  "postcss": {
-    "plugins": {
-      "autoprefixer": {}
+    "name": "vue-highlightable-input",
+    "version": "1.0.0",
+    "description": "A Vue.js component that highlights text as you type",
+    "main": "dist/vue-highlightable-input.js",
+    "files": [
+        "dist/vue-highlightable-input.js"
+    ],
+    "scripts": {
+        "build": "rollup -c"
+    },
+    "author": "Wasi Haider",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/SyedWasiHaider/VueHighlightInput.git"
+    },
+
+    "devDependencies": {
+        "rimraf": "^2.6.1",
+        "rollup-plugin-vue": "^3.0.0",
+        "vue-template-compiler": "^2.5.16"
+    },
+    "dependencies": {
+        "html-minifier": "^3.5.11"
     }
-  },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions",
-    "not ie <= 8"
-  ]
 }
