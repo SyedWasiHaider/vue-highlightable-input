@@ -2,6 +2,7 @@
 Highlight specific words as you're typing. 
 
 ![alt demo](https://github.com/SyedWasiHaider/vue-highlightable-input/blob/master/doc/demo.gif)
+[Try it yourself](http://historical-hen.surge.sh/)
 
 # Install
 
