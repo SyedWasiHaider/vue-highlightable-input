@@ -4,8 +4,14 @@
 </template>
 
 <script>
+
+var tagsToReplace = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;'
+};
+
 export default {
-  name: 'HighlightInput',
   props: {
     highlight: Array,
     value: String,
@@ -105,14 +111,14 @@ export default {
         var startingPosition = 0
         for (var k = 0; k < highlightPositions.length; k++){
             var position = highlightPositions[k]
-            result += this.internalValue.substring(startingPosition, position.start)
-            result += "<span style='" + (highlightPositions[k].style || this.highlightStyle || 'background-color:yellow') + "'>" + this.internalValue.substring(position.start, position.end) + "</span>"
+            result += this.safe_tags_replace(this.internalValue.substring(startingPosition, position.start))
+            result += "<span style='" + (highlightPositions[k].style || this.highlightStyle || 'background-color:yellow') + "'>" + this.safe_tags_replace(this.internalValue.substring(position.start, position.end)) + "</span>"
             startingPosition = position.end
         }
 
         // In case we exited the loop early
         if (startingPosition < this.internalValue.length)
-          result += this.internalValue.substring(startingPosition, this.internalValue.length)
+          result += this.safe_tags_replace(this.internalValue.substring(startingPosition, this.internalValue.length))
 
         this.htmlOutput = result
         this.$emit('input', this.internalValue)
@@ -139,6 +145,15 @@ export default {
 
       console.error("Expected a string or an array of strings")
       return null
+    },
+
+    // Copied from: https://stackoverflow.com/questions/5499078/fastest-method-to-escape-html-tags-as-html-entities
+    safe_tags_replace(str) {
+        return str.replace(/[&<>]/g, this.replaceTag);
+    },
+
+    replaceTag(tag) {
+        return tagsToReplace[tag] || tag;
     },
 
     // Copied verbatim because I'm lazy:
