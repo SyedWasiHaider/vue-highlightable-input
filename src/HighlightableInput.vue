@@ -38,8 +38,9 @@ export default {
     },
 
     value() {
-      this.internalValue = this.value;
-      this.processHighlights()
+      if (this.internalValue != this.value){
+        this.processHighlights()
+      }
     },
 
     highlightEnabled () {
