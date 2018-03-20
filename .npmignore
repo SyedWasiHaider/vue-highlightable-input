@@ -6,6 +6,6 @@ node_modules
 .npmignore
 .babelrc
 bundle.css
-dist
 example
 rollup.config.js
+src

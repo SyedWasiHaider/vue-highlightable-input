@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import HighlightableInput from "../../../src/HighlightableInput"
+import HighlightableInput from "vue-highlightable-input"
 export default {
   name: 'HelloWorld',
   components : {

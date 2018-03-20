@@ -6,7 +6,6 @@ Highlight specific words as you're typing.
 
 # Install
 
-(Broken at the moment. Use dist directly.)
 ```sh
 npm install vue-highlightable-input --save
 ```
