@@ -1,10 +1,10 @@
 <template>
   <div id="container" class="hello">
-    <label> <strong> Try typing Chicken, Noodle, So or Soup </strong> </label>
+    <label> <strong> Try typing Chicken, Noodle, So, Soup or Whatever  </strong> </label>
     <highlightable-input 
       align="left"
       class="myinput" 
-      highlight-style="background-color:red" 
+      highlight-style="background-color:yellow" 
       :highlight-enabled="highlightEnabled" 
       :highlight="highlight" v-model="msg"
     />
@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import HighlightableInput from "vue-highlightable-input"
+import HighlightableInput from "../../../src/HighlightableInput"
 export default {
   name: 'HelloWorld',
   components : {
@@ -28,6 +28,8 @@ export default {
         {text:'noodle', style:"background-color:#fca88f"},
         {text:'soup', style:"background-color:#bbe4cb"},
         {text:'so', style:"background-color:#fff05e"},
+        "whatever",
+        {start: 2, end: 5, style:"background-color:#f330ff"}
       ],
       highlightEnabled: true
     }

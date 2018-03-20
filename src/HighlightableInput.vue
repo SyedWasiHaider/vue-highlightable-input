@@ -11,6 +11,8 @@ var tagsToReplace = {
     '>': '&gt;'
 };
 
+import IntervalTree from 'node-interval-tree'
+
 export default {
   props: {
     highlight: Array,
@@ -71,7 +73,8 @@ export default {
           return;
         }
 
-        // Find the positin ranges of the text to highlight
+        var intervalTree = new IntervalTree()
+        // Find the position ranges of the text to highlight
         var highlightPositions = []
         var sortedHighlights = this.normalizedHighlights();
         if (!sortedHighlights)
@@ -79,33 +82,48 @@ export default {
         
         for (var i = 0; i < sortedHighlights.length; i++){
           var highlightObj = sortedHighlights[i]
-          var indices = this.getIndicesOf(highlightObj.text, this.internalValue)
-          if (indices.length == 0) continue;
-          indices.forEach(index => 
-          {
-            if (highlightPositions[index] != -1){
-              highlightPositions[index] = { style: highlightObj.style, end: index+highlightObj.text.length}; 
-            
-              // Fill in everything between the range to -1 to avoid overlapping ranges
-              for (var b = index+1; b < highlightPositions[index].end; b++){
-                highlightPositions[b] = -1;
-              }
 
-              // Look back and fill in any previous ranges that overlap with the current one
-              for (b = index+1; b > this.internalValue.length; b--){
-                if (highlightPositions[b].start == highlightPositions[index].start || highlightPositions[b].end >= highlightPositions[index].start)
-                  highlightPositions[b] = -1
-              } 
+          var indices = []
+          if (highlightObj.text)
+            indices = this.getIndicesOf(highlightObj.text, this.internalValue)
+
+          indices.forEach(start => 
+          {
+            var end = start+highlightObj.text.length - 1;
+            var overlap = intervalTree.search(start, end);
+            var maxLengthOverlap = overlap.reduce((max, o) => { return Math.max(o.end-o.start, max) }, 0)
+            if (overlap.length == 0){
+              intervalTree.insert(start, end, { start: start, end: end, style: highlightObj.style} )
+            }
+            else if ((end - start) > maxLengthOverlap)
+            {
+              overlap.forEach(o => {
+                intervalTree.remove(o.start, o.end, o)
+              })
+              intervalTree.insert(start, end, { start: start, end: end, style: highlightObj.style} )
             }
           })
+
+          if (highlightObj.start && highlightObj.end && highlightObj.start < highlightObj.end){
+            var start = highlightObj.start;
+            var end = highlightObj.end - 1;
+            var overlap = intervalTree.search(highlightObj.start, highlightObj.end);
+            var maxLengthOverlap = overlap.reduce((max, o) => { return Math.max(o.end-o.start, max) }, 0)
+            if (overlap.length == 0){
+              intervalTree.insert(start, end, { start: start, end: end, style: highlightObj.style} )
+            }
+            else if ((end - start) > maxLengthOverlap)
+            {
+              overlap.forEach(o => {
+                intervalTree.remove(o.start, o.end, o)
+              })
+              intervalTree.insert(start, end, { start: start, end: end, style: highlightObj.style} )
+            }
+          }
         }
         
-        // Javascript ugliness to get rid of any undefined values
-        // Also we're sorting the range
-        highlightPositions = Object.keys(highlightPositions).map(x => { 
-            if (x != undefined && highlightPositions[x] != -1)
-              return {start: parseInt(x), end: highlightPositions[x].end, style: highlightPositions[x].style}
-          }).filter(x => x != undefined).sort((a,b) => a.start-b.start)
+        highlightPositions = intervalTree.search(0, this.internalValue.length)
+        highlightPositions = highlightPositions.sort((a,b) => a.start-b.start)
 
         // Construct the output with styled spans around the highlight text
         var result = ''
@@ -113,8 +131,8 @@ export default {
         for (var k = 0; k < highlightPositions.length; k++){
             var position = highlightPositions[k]
             result += this.safe_tags_replace(this.internalValue.substring(startingPosition, position.start))
-            result += "<span style='" + (highlightPositions[k].style || this.highlightStyle || 'background-color:yellow') + "'>" + this.safe_tags_replace(this.internalValue.substring(position.start, position.end)) + "</span>"
-            startingPosition = position.end
+            result += "<span style='" + (highlightPositions[k].style || this.highlightStyle || 'background-color:yellow') + "'>" + this.safe_tags_replace(this.internalValue.substring(position.start, position.end + 1)) + "</span>"
+            startingPosition = position.end + 1
         }
 
         // In case we exited the loop early
@@ -134,11 +152,22 @@ export default {
       
       if (Object.prototype.toString.call(this.highlight) === '[object Array]' && this.highlight.length > 0){
         return this.highlight.map(h => {
-          return {
-            text:  typeof(h) == "string" ? h : h.text,
-            style:  h.style || this.highlightStyle
+          if (h.text || (typeof(h) == "string")) {
+            return {
+              text:   h.text || h,
+              style:  h.style || this.highlightStyle,
+            }
+          }else if (h.start && h.end) {
+             return {
+              style:  h.style || this.highlightStyle,
+              start: h.start,
+              end:   h.end
+            }
           }
-        }).sort((a,b) => a.text > b.text) 
+          else {
+            console.error("Please provide a valid highlight object or string")
+          }
+        }).sort((a,b) => (a.text && b.text) ? a.text > b.text : ((a.start == b.start ? (a.end < b.end) : (a.start < b.start)))) 
         // We sort here in ascending order because we want to find highlights for the smaller strings first
         // and then override them later with any overlapping larger strings. So for example:
         // if we have highlights: g and gg and the string "sup gg" should have only "gg" highlighted.

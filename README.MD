@@ -18,10 +18,10 @@ npm install vue-highlightable-input --save
 
 ```html
 <highlightable-input 
-  highlight-style="background-color:red"
+  highlight-style="background-color:yellow" 
   :highlight-enabled="highlightEnabled" 
   :highlight="highlight" 
-  v-model="mytext"
+  v-model="msg"
 />
 ```
 
@@ -41,6 +41,8 @@ export default {
         {text:'noodle', style:"background-color:#fca88f"},
         {text:'soup', style:"background-color:#bbe4cb"},
         {text:'so', style:"background-color:#fff05e"},
+        "whatever",
+        {start: 2, end: 5, style:"background-color:#f330ff"}
       ],
       highlightEnabled: true
     }
@@ -52,7 +54,7 @@ export default {
 
 | Name       | Type     | Default   | Description       |  Reactive
 | ---        | ---      | ---       | ---               |  ---
-| highlight      | String or Array   | null       | The string or list of words to highlight. This can be a single string value or you can do an array of strings or array of [**Highlight Objects**](https://github.com/SyedWasiHaider/vue-highlightable-input#highlight-object).  | Yes |
+| highlight      | String or Array   | null       | The string or list of words to highlight. This can be a single string value or you can do an array of strings or array of [**Highlight Objects**](https://github.com/SyedWasiHaider/vue-highlightable-input#highlight-object) or array of [**Range Objects**](https://github.com/SyedWasiHaider/vue-highlightable-input#range-object).  | Yes |
 | highlightEnabled  | Boolean   | true        | If true, will highlight the text | Yes |
 | value | String   | null        | Raw text value | Yes
 | highlightStyle  | null  | false     | If no style is provided for text, this will act as the global styling for the highlight. | No (TODO)
@@ -65,6 +67,15 @@ export default {
 }
 ```
 
+#### Range Object
+```javascript
+{
+    start:1,
+    end: 9, 
+    style:"background-color:#f37373"
+}
+```
+
 ### Events
 
 | Name       | Description
@@ -72,6 +83,11 @@ export default {
 | @input     | Just like a regular input html element you can use this to react to input events
 
 Note, that you can also you `v-model`
+
+## TODO:
+
+- Improve performance with large text
+- Add select and highlight 
 
 ### Some notes
 
