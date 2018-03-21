@@ -57,7 +57,8 @@ export default {
 | highlight      | String or Array   | null       | The string or list of words to highlight. This can be a single string value or you can do an array of strings or array of [**Highlight Objects**](https://github.com/SyedWasiHaider/vue-highlightable-input#highlight-object) or array of [**Range Objects**](https://github.com/SyedWasiHaider/vue-highlightable-input#range-object).  | Yes |
 | highlightEnabled  | Boolean   | true        | If true, will highlight the text | Yes |
 | value | String   | null        | Raw text value | Yes
-| highlightStyle  | null  | false     | If no style is provided for text, this will act as the global styling for the highlight. | No (TODO)
+| highlightStyle  | null  | background-color:yellow     | If no style is provided for text, this will act as the global styling for the highlight. | Yes
+| highlightDelay  | null  | 500     | Determines how long to wait before processing the highlights. Setting this to a low value is fine for small text but setting it higher may improve performance significantly for larger text | Yes
 
 #### Highlight Object
 ```javascript

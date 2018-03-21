@@ -12,15 +12,23 @@ var tagsToReplace = {
 };
 
 import IntervalTree from 'node-interval-tree'
+import _ from 'lodash'
 
 export default {
   props: {
     highlight: Array,
     value: String,
-    highlightStyle: String,
+    highlightStyle: {
+      type : String,
+      default:    'background-color:yellow'
+    },
     highlightEnabled: {
-      default: true,
-      type: Boolean
+      type: Boolean,
+      default: true
+    },
+    highlightDelay: {
+      type: Number,
+      default: 500 //This is milliseconds
     }
   },
   data() { 
@@ -30,10 +38,14 @@ export default {
     } 
   },
   mounted () {
-    this.$el.addEventListener("input", this.handleChange)
+    this.$el.addEventListener("keydown", this.handleChange)
   },
 
   watch: {
+
+    highlightStyle(){
+      this.processHighlights()
+    },
 
     highlight() {
       this.processHighlights()
@@ -57,15 +69,18 @@ export default {
   },
   methods: {
 
-    handleChange(){
+    handleChange: _.debounce(function(){
       if (this.internalValue !== this.$el.innerText){
         this.internalValue = this.$el.innerText
         this.processHighlights();
       }
-    },
+    }, this.highlightDelay),
 
     processHighlights()
     {
+        if (this.typing)
+          return;
+
         if (!this.highlightEnabled)
         {
           this.htmlOutput = this.internalValue;
@@ -131,7 +146,7 @@ export default {
         for (var k = 0; k < highlightPositions.length; k++){
             var position = highlightPositions[k]
             result += this.safe_tags_replace(this.internalValue.substring(startingPosition, position.start))
-            result += "<span style='" + (highlightPositions[k].style || this.highlightStyle || 'background-color:yellow') + "'>" + this.safe_tags_replace(this.internalValue.substring(position.start, position.end + 1)) + "</span>"
+            result += "<span style='" + (highlightPositions[k].style || this.highlightStyle) + "'>" + this.safe_tags_replace(this.internalValue.substring(position.start, position.end + 1)) + "</span>"
             startingPosition = position.end + 1
         }
 
@@ -282,4 +297,5 @@ export default {
 div {
   height: 50px;
 }
+
 </style>
