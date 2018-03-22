@@ -9,7 +9,8 @@
   },
   "dependencies": {
     "vue": "^2.5.16",
-    "vue-highlightable-input": "^1.0.1-1"
+    "vue-highlightable-input": "^1.0.1-1",
+    "vuetify": "^1.0.10"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.0.0-beta.6",

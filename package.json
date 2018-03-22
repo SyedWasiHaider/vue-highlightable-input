@@ -1,6 +1,6 @@
 {
     "name": "vue-highlightable-input",
-    "version": "1.0.1-4-alpha",
+    "version": "1.0.2",
     "description": "A Vue.js component that highlights text as you type",
     "main": "./dist/vue-highlightable-input.js",
     "files": [
@@ -17,6 +17,8 @@
     },
     "devDependencies": {
         "rimraf": "^2.6.1",
+        "rollup-plugin-commonjs": "^9.1.0",
+        "rollup-plugin-node-resolve": "^3.3.0",
         "rollup-plugin-vue": "^3.0.0",
         "vue-template-compiler": "^2.5.16"
     },

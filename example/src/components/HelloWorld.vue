@@ -1,20 +1,46 @@
 <template>
-  <div id="container" class="hello">
-    <label> <strong> Try typing Chicken, Noodle, So, Soup or Whatever  </strong> </label>
-    <highlightable-input 
-      align="left"
-      class="myinput" 
-      highlight-style="background-color:yellow" 
-      :highlight-enabled="highlightEnabled" 
-      :highlight="highlight" v-model="msg"
-    />
-    <input type="checkbox" id="checkbox" v-model="highlightEnabled">
-    <label for="checkbox"> Highlight Enabled? {{ highlightEnabled }}</label>
-  </div>
+    <v-app style="margin:30px">
+      <v-container fluid .mx-auto>
+          <img height="160px" width="250px" src="../assets/logo.png">
+
+          <h3> Highlight and style specific words as you're typing. </h3>
+          <highlightable-input 
+            align="left"
+            class="myinput" 
+            data-placeholder="Try typing any of the words below like hackernews or @Soup"
+            :highlight-style="defaultStyle" 
+            :highlight-enabled="highlightEnabled" 
+            :highlight="highlight" 
+            v-model="msg"
+          />
+          <input type="checkbox" id="checkbox" v-model="highlightEnabled">
+          <label for="checkbox"> Highlight </label>
+
+          <br><br>
+          <label> Add your own highlights (Text only) </label>
+          <input v-model="customHighlight"  v-on:keyup.13="handleNewHighlights"/>
+          <ul>
+              <li v-for="(h,i) in this.highlight" :key="i">
+                <span v-if="h.start && h.end">Range: <span :style="h.style || defaultStyle">{{h.text || h}} </span> </span>
+                <span v-else>Text: <span :style="h.style || defaultStyle">{{h.text || h}}</span> </span>
+              </li>
+          </ul>
+
+          <h3> Install </h3>
+          <p class="npminstall"> npm install --save vue-highlightable-input </p>
+
+          <h3> Source </h3>
+          <a class="npminstall" href="https://github.com/SyedWasiHaider/vue-highlightable-input">https://github.com/SyedWasiHaider/vue-highlightable-input</a>
+      </v-container>
+    </v-app>
 </template>
 
 <script>
-import HighlightableInput from "../../../src/HighlightableInput"
+import HighlightableInput from "../../../dist/vue-highlightable-input"
+import Vuetify from 'vuetify'
+import Vue from 'vue'
+Vue.use(Vuetify)
+
 export default {
   name: 'HelloWorld',
   components : {
@@ -23,17 +49,26 @@ export default {
   data() {
     return {
       msg: '',
+      customHighlight:'',
+      defaultStyle: 'background-color:yellow',
       highlight: [
-        {text:'chicken', style:"background-color:#f37373"},
-        {text:'noodle', style:"background-color:#fca88f"},
-        {text:'soup', style:"background-color:#bbe4cb"},
-        {text:'so', style:"background-color:#fff05e"},
+        {text:'hackernews', style:"background-color:#ff6600"},
+        {text:'CASEsensitive', style:"background-color:#fca88f", caseSensitive: true},
+        {text:'@Soup', style:"background-color:#bbe4cb"},
+        {text:'comic-sans', style:"font-family:comic-sans"},
+        {text:'bold', style:"font-weight: bold;"},
         "whatever",
-        {start: 2, end: 5, style:"background-color:#f330ff"}
+        {start:3, end:5, style:"border: 2px solid #73AD21;"},
       ],
       highlightEnabled: true
     }
   },
+  methods: {
+    handleNewHighlights () {
+        this.highlight.unshift(this.customHighlight)
+        this.customHighlight = ""
+    }
+  }
 }
 </script>
 
@@ -42,14 +77,11 @@ export default {
 h3 {
   margin: 40px 0 0;
 }
-ul {
-  list-style-type: none;
-  padding: 0;
-}
+
 li {
-  display: inline-block;
-  margin: 0 10px;
+  text-align: left
 }
+
 a {
   color: #42b983;
 }
@@ -58,6 +90,21 @@ a {
   height: 40px;
   width: auto;
   margin: 30px;
+  background-color: #e2e1ee
+}
+
+.npminstall {
+  margin-left: 40px;
+  margin-right: 40px;
+  background-color: black;
+  background-color: #f2f1fe;
+  width: auto;
+}
+
+[data-placeholder]:empty:before{
+  content: attr(data-placeholder);
+  color: #888;
+  font-style: italic;
 }
 
 #container {

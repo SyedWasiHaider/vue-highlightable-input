@@ -1,10 +1,10 @@
 ![icon](https://github.com/SyedWasiHaider/vue-highlightable-input/blob/master/doc/icon.png)
 
 # Vue Highlightable Input
-Highlight specific words as you're typing. 
+Highlight and style specific words as you're typing. 
 
 ![alt demo](https://github.com/SyedWasiHaider/vue-highlightable-input/blob/master/doc/demo.gif)
-[Try it yourself](http://historical-hen.surge.sh/)
+[Try it yourself](https://vue-highlightable-input.surge.sh/)
 
 # Install
 
@@ -58,24 +58,28 @@ export default {
 | highlightEnabled  | Boolean   | true        | If true, will highlight the text | Yes |
 | value | String   | null        | Raw text value | Yes
 | highlightStyle  | null  | background-color:yellow     | If no style is provided for text, this will act as the global styling for the highlight. | Yes
-| highlightDelay  | null  | 500     | Determines how long to wait before processing the highlights. Setting this to a low value is fine for small text but setting it higher may improve performance significantly for larger text | Yes
+| highlightDelay  | Number  | 500     | Determines how long to wait before processing the highlights. Setting this to a low value is fine for small text but setting it higher may improve performance significantly for larger text | Yes
+| caseSensitive  | Boolean  | false     | If true, will treat highlight strings with case sensitivity. Can be overrided per highlight object. | Yes
 
 #### Highlight Object
 ```javascript
 {
-    text:'chicken', 
-    style:"background-color:#f37373"
+    text:'chicken', // Required
+    style:"background-color:#f37373" // Optional
+    caseSensitive: true // Optional defaults to False
 }
 ```
 
 #### Range Object
 ```javascript
 {
-    start:1,
-    end: 9, 
-    style:"background-color:#f37373"
+    start:1, // Required
+    end: 9,  // Required
+    style:"background-color:#f37373" // Optional
 }
 ```
+End must be greater than start. 
+The range end is exlusive in other words ==> [start, end)
 
 ### Events
 
@@ -89,6 +93,7 @@ Note, that you can also you `v-model`
 
 - Improve performance with large text
 - Add select and highlight 
+- Regex support
 
 ### Some notes
 

@@ -1,7 +1,6 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <HelloWorld/>
   </div>
 </template>
 
@@ -25,9 +24,4 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }
-
-span.noob {
-  background-color:green
-}
-
 </style>

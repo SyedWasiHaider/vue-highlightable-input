@@ -29,12 +29,17 @@ export default {
     highlightDelay: {
       type: Number,
       default: 500 //This is milliseconds
+    },
+    caseSensitive: {
+      type: Boolean,
+      default: false
     }
   },
   data() { 
     return {
       internalValue: '',
-      htmlOutput: ''
+      htmlOutput: '',
+      debouncedHandler: null
     } 
   },
   mounted () {
@@ -67,14 +72,18 @@ export default {
       this.restoreSelection(this.$el, selection)
     }
   },
+  
   methods: {
 
-    handleChange: _.debounce(function(){
+    handleChange() {
+      this.debouncedHandler = _.debounce(function(){
       if (this.internalValue !== this.$el.innerText){
         this.internalValue = this.$el.innerText
         this.processHighlights();
       }
-    }, this.highlightDelay),
+      }, this.highlightDelay)
+      this.debouncedHandler();
+    },
 
     processHighlights()
     {
@@ -100,40 +109,18 @@ export default {
 
           var indices = []
           if (highlightObj.text)
-            indices = this.getIndicesOf(highlightObj.text, this.internalValue)
+            indices = this.getIndicesOf(highlightObj.text, this.internalValue, _.isUndefined(highlightObj.caseSensitive) ? this.caseSensitive : highlightObj.caseSensitive)
 
           indices.forEach(start => 
           {
             var end = start+highlightObj.text.length - 1;
-            var overlap = intervalTree.search(start, end);
-            var maxLengthOverlap = overlap.reduce((max, o) => { return Math.max(o.end-o.start, max) }, 0)
-            if (overlap.length == 0){
-              intervalTree.insert(start, end, { start: start, end: end, style: highlightObj.style} )
-            }
-            else if ((end - start) > maxLengthOverlap)
-            {
-              overlap.forEach(o => {
-                intervalTree.remove(o.start, o.end, o)
-              })
-              intervalTree.insert(start, end, { start: start, end: end, style: highlightObj.style} )
-            }
+            this.insertRange(start, end, highlightObj, intervalTree)
           })
 
           if (highlightObj.start && highlightObj.end && highlightObj.start < highlightObj.end){
             var start = highlightObj.start;
             var end = highlightObj.end - 1;
-            var overlap = intervalTree.search(highlightObj.start, highlightObj.end);
-            var maxLengthOverlap = overlap.reduce((max, o) => { return Math.max(o.end-o.start, max) }, 0)
-            if (overlap.length == 0){
-              intervalTree.insert(start, end, { start: start, end: end, style: highlightObj.style} )
-            }
-            else if ((end - start) > maxLengthOverlap)
-            {
-              overlap.forEach(o => {
-                intervalTree.remove(o.start, o.end, o)
-              })
-              intervalTree.insert(start, end, { start: start, end: end, style: highlightObj.style} )
-            }
+            this.insertRange(start, end, highlightObj, intervalTree)
           }
         }
         
@@ -158,6 +145,21 @@ export default {
         this.$emit('input', this.internalValue)
     },
 
+    insertRange(start, end, highlightObj, intervalTree){
+            var overlap = intervalTree.search(start, end);
+            var maxLengthOverlap = overlap.reduce((max, o) => { return Math.max(o.end-o.start, max) }, 0)
+            if (overlap.length == 0){
+              intervalTree.insert(start, end, { start: start, end: end, style: highlightObj.style} )
+            }
+            else if ((end - start) > maxLengthOverlap)
+            {
+              overlap.forEach(o => {
+                intervalTree.remove(o.start, o.end, o)
+              })
+              intervalTree.insert(start, end, { start: start, end: end, style: highlightObj.style} )
+            }
+    },
+
     normalizedHighlights () {
       if (this.highlight == null)
         return null;
@@ -171,12 +173,14 @@ export default {
             return {
               text:   h.text || h,
               style:  h.style || this.highlightStyle,
+              caseSensitive: h.caseSensitive
             }
           }else if (h.start && h.end) {
              return {
               style:  h.style || this.highlightStyle,
               start: h.start,
-              end:   h.end
+              end:   h.end,
+              caseSensitive: h.caseSensitive
             }
           }
           else {
