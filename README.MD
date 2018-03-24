@@ -52,14 +52,15 @@ export default {
 
 ### Props
 
-| Name       | Type     | Default   | Description       |  Reactive
-| ---        | ---      | ---       | ---               |  ---
-| highlight      | String or Array   | null       | The string or list of words to highlight. This can be a single string value or you can do an array of strings or array of [**Highlight Objects**](https://github.com/SyedWasiHaider/vue-highlightable-input#highlight-object) or array of [**Range Objects**](https://github.com/SyedWasiHaider/vue-highlightable-input#range-object).  | Yes |
-| highlightEnabled  | Boolean   | true        | If true, will highlight the text | Yes |
-| value | String   | null        | Raw text value | Yes
-| highlightStyle  | null  | background-color:yellow     | If no style is provided for text, this will act as the global styling for the highlight. | Yes
-| highlightDelay  | Number  | 500     | Determines how long to wait before processing the highlights. Setting this to a low value is fine for small text but setting it higher may improve performance significantly for larger text | Yes
-| caseSensitive  | Boolean  | false     | If true, will treat highlight strings with case sensitivity. Can be overrided per highlight object. | Yes
+| Name     | Required  | Type     | Default   | Description       |  Reactive
+| ---      | ---   | ---      | ---       | ---               |  ---
+| highlight | **Yes**     | String or Array   | null       | The string or list of words to highlight. This can be a single string value or you can do an array of strings or array of [**Highlight Objects**](https://github.com/SyedWasiHaider/vue-highlightable-input#highlight-object) or array of [**Range Objects**](https://github.com/SyedWasiHaider/vue-highlightable-input#range-object).  | Yes |
+| highlightEnabled  | No     |  Boolean   | true        | If true, will highlight the text | Yes |
+| highlightStyle  | No | String  | background-color:yellow     | If no style is provided for text, this will act as the global styling for the highlight. | Yes
+| highlightDelay  | No | Number  | 500     | Determines how long in milliseconds to wait before processing the highlights. Setting this to a low value is fine for small text but setting it higher may improve performance significantly for larger text | Yes
+| caseSensitive  | No | Boolean  | false     | If true, will treat highlight strings with case sensitivity. Can be overrided per highlight object. | Yes
+| value | No | String   | null        | Raw text value. | Yes
+| fireOn | No | String   | keydown        | The dom event on which the highlight event should be fired. This can be any event that the div content editable can handle. | No (only because the listener is being added in mounted)
 
 #### Highlight Object
 ```javascript

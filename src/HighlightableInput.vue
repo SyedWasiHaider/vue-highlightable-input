@@ -33,6 +33,10 @@ export default {
     caseSensitive: {
       type: Boolean,
       default: false
+    },
+    fireOn : {
+      type: String,
+      default: 'keydown'
     }
   },
   data() { 
@@ -43,7 +47,7 @@ export default {
     } 
   },
   mounted () {
-    this.$el.addEventListener("keydown", this.handleChange)
+    this.$el.addEventListener(this.fireOn, this.handleChange)
   },
 
   watch: {
@@ -64,6 +68,10 @@ export default {
 
     highlightEnabled () {
       this.processHighlights()
+    },
+
+    caseSensitive () {
+      this.processHighlights();
     },
 
     htmlOutput() {

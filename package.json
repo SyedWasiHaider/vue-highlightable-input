@@ -1,6 +1,6 @@
 {
     "name": "vue-highlightable-input",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "description": "A Vue.js component that highlights text as you type",
     "main": "./dist/vue-highlightable-input.js",
     "files": [

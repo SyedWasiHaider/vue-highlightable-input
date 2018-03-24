@@ -17892,6 +17892,10 @@ var HighlightableInput = {render: function(){var _vm=this;var _h=_vm.$createElem
     caseSensitive: {
       type: Boolean,
       default: false
+    },
+    fireOn : {
+      type: String,
+      default: 'keydown'
     }
   },
   data() { 
@@ -17902,7 +17906,7 @@ var HighlightableInput = {render: function(){var _vm=this;var _h=_vm.$createElem
     } 
   },
   mounted () {
-    this.$el.addEventListener("keydown", this.handleChange);
+    this.$el.addEventListener(this.fireOn, this.handleChange);
   },
 
   watch: {
@@ -17922,6 +17926,10 @@ var HighlightableInput = {render: function(){var _vm=this;var _h=_vm.$createElem
     },
 
     highlightEnabled () {
+      this.processHighlights();
+    },
+
+    caseSensitive () {
       this.processHighlights();
     },
 

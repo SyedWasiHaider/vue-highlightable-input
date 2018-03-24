@@ -11,10 +11,13 @@
             :highlight-style="defaultStyle" 
             :highlight-enabled="highlightEnabled" 
             :highlight="highlight" 
+            :caseSensitive="caseEnabled"
             v-model="msg"
           />
           <input type="checkbox" id="checkbox" v-model="highlightEnabled">
           <label for="checkbox"> Highlight </label>
+          <input type="checkbox" id="checkbox" v-model="caseEnabled">
+          <label for="checkbox"> Case Sensitive (Global) </label>
 
           <br><br>
           <label> Add your own highlights (Text only) </label>
@@ -49,7 +52,6 @@ export default {
   data() {
     return {
       msg: '',
-      customHighlight:'',
       defaultStyle: 'background-color:yellow',
       highlight: [
         {text:'hackernews', style:"background-color:#ff6600"},
@@ -60,7 +62,9 @@ export default {
         "whatever",
         {start:3, end:5, style:"border: 2px solid #73AD21;"},
       ],
-      highlightEnabled: true
+      highlightEnabled: true,
+      caseEnabled: false,
+      customHighlight:''
     }
   },
   methods: {
