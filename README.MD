@@ -1,4 +1,5 @@
 ![icon](https://github.com/SyedWasiHaider/vue-highlightable-input/blob/master/doc/icon.png)
+[![npm version](https://badge.fury.io/js/vue-highlightable-input.svg)](https://badge.fury.io/js/vue-highlightable-input)
 
 # Vue Highlightable Input
 Highlight and style specific words as you're typing. 
