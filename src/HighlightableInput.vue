@@ -12,7 +12,8 @@ var tagsToReplace = {
 };
 
 import IntervalTree from 'node-interval-tree'
-import _ from 'lodash'
+import debounce from 'lodash/debounce'
+import isUndefined from 'lodash/isUndefined'
 
 export default {
   props: {
@@ -84,7 +85,7 @@ export default {
   methods: {
 
     handleChange() {
-      this.debouncedHandler = _.debounce(function(){
+      this.debouncedHandler = debounce(function(){
       if (this.internalValue !== this.$el.innerText){
         this.internalValue = this.$el.innerText
         this.processHighlights();
@@ -117,7 +118,7 @@ export default {
 
           var indices = []
           if (highlightObj.text)
-            indices = this.getIndicesOf(highlightObj.text, this.internalValue, _.isUndefined(highlightObj.caseSensitive) ? this.caseSensitive : highlightObj.caseSensitive)
+            indices = this.getIndicesOf(highlightObj.text, this.internalValue, isUndefined(highlightObj.caseSensitive) ? this.caseSensitive : highlightObj.caseSensitive)
 
           indices.forEach(start => 
           {
