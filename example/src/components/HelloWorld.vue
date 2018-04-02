@@ -14,10 +14,14 @@
             :caseSensitive="caseEnabled"
             v-model="msg"
           />
-          <input type="checkbox" id="checkbox" v-model="highlightEnabled">
-          <label for="checkbox"> Highlight </label>
-          <input type="checkbox" id="checkbox" v-model="caseEnabled">
-          <label for="checkbox"> Case Sensitive (Global) </label>
+          
+          <label>
+            <input type="checkbox" v-model="highlightEnabled"> Highlight
+          </label>
+          
+          <label>
+            <input type="checkbox" v-model="caseEnabled"> Case Sensitive (Global)
+          </label>
 
           <br><br>
           <label> Add your own highlights (Text only) </label>
