@@ -24,12 +24,12 @@
           </label>
 
           <br><br>
-          <label> Add your own highlights (Text only) </label>
+          <label> Add your own highlights (Text only but not RegExp) </label>
           <input v-model="customHighlight"  v-on:keyup.13="handleNewHighlights"/>
           <ul>
               <li v-for="(h,i) in this.highlight" :key="i">
                 <span v-if="h.start && h.end">Range: <span :style="h.style || defaultStyle">{{h.text || h}} </span> </span>
-                <span v-else>Text: <span :style="h.style || defaultStyle">{{h.text || h}}</span> </span>
+                <span v-else>Text: <span :style="h.style || defaultStyle">{{(h.text || h).toString()}}</span> </span>
               </li>
           </ul>
 
@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import HighlightableInput from "../../../dist/vue-highlightable-input"
+import HighlightableInput from "../../../src/HighlightableInput"
 import Vuetify from 'vuetify'
 import Vue from 'vue'
 Vue.use(Vuetify)
@@ -65,6 +65,7 @@ export default {
         {text:'bold', style:"font-weight: bold;"},
         "whatever",
         {start:3, end:5, style:"border: 2px solid #73AD21;"},
+        {text: /[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}/img, style:"color: white; background-color:#aa2313"} // Phone number regex
       ],
       highlightEnabled: true,
       caseEnabled: false,

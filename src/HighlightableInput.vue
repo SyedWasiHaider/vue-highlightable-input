@@ -118,13 +118,25 @@ export default {
 
           var indices = []
           if (highlightObj.text)
-            indices = this.getIndicesOf(highlightObj.text, this.internalValue, isUndefined(highlightObj.caseSensitive) ? this.caseSensitive : highlightObj.caseSensitive)
-
-          indices.forEach(start => 
           {
-            var end = start+highlightObj.text.length - 1;
-            this.insertRange(start, end, highlightObj, intervalTree)
-          })
+            if (typeof(highlightObj.text) == "string"){
+              indices = this.getIndicesOf(highlightObj.text, this.internalValue, isUndefined(highlightObj.caseSensitive) ? this.caseSensitive : highlightObj.caseSensitive)
+              indices.forEach(start => 
+              {
+                var end = start+highlightObj.text.length - 1;
+                this.insertRange(start, end, highlightObj, intervalTree)
+              })
+            }
+
+            if (Object.prototype.toString.call(highlightObj.text) === '[object RegExp]'){
+              indices = this.getRegexIndices(highlightObj.text, this.internalValue)
+              indices.forEach(pair => 
+              {
+                this.insertRange(pair.start, pair.end, highlightObj, intervalTree)
+              })
+            }
+          }
+
 
           if (highlightObj.start && highlightObj.end && highlightObj.start < highlightObj.end){
             var start = highlightObj.start;
@@ -173,12 +185,12 @@ export default {
       if (this.highlight == null)
         return null;
 
-      if (typeof(this.highlight) == "string")
+      if (Object.prototype.toString.call(this.highlight) === '[object RegExp]' || typeof(this.highlight) == "string")
         return [{text: this.highlight}]
       
       if (Object.prototype.toString.call(this.highlight) === '[object Array]' && this.highlight.length > 0){
         return this.highlight.map(h => {
-          if (h.text || (typeof(h) == "string")) {
+          if (h.text || typeof(h) == "string" || Object.prototype.toString.call(h) === '[object RegExp]') {
             return {
               text:   h.text || h,
               style:  h.style || this.highlightStyle,
@@ -212,6 +224,21 @@ export default {
 
     replaceTag(tag) {
         return tagsToReplace[tag] || tag;
+    },
+
+    getRegexIndices(regex, str) {
+        if (!regex.global){
+          console.error("Expected " + regex + " to be global")
+          return []
+        }
+        
+        regex = RegExp(regex)
+        var indices = [];
+        var match = null;
+        while ((match = regex.exec(str)) != null) {
+            indices.push({start:match.index, end: match.index + match[0].length - 1});
+        }
+        return indices;
     },
 
     // Copied verbatim because I'm lazy:
