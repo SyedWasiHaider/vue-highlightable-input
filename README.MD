@@ -55,7 +55,7 @@ export default {
 
 | Name     | Required  | Type     | Default   | Description       |  Reactive
 | ---      | ---   | ---      | ---       | ---               |  ---
-| highlight | **Yes**     | String or Array   | null       | The string or list of words to highlight. This can be a single string value or you can do an array of strings or array of [**Highlight Objects**](https://github.com/SyedWasiHaider/vue-highlightable-input#highlight-object) or array of [**Range Objects**](https://github.com/SyedWasiHaider/vue-highlightable-input#range-object).  | Yes |
+| highlight | **Yes**     | String or Array   | null       | The string or list of words to highlight. This can be a single string value, a RegExp or you can do an array of strings or RegExp or array of [**Highlight Objects**](https://github.com/SyedWasiHaider/vue-highlightable-input#highlight-object) or array of [**Range Objects**](https://github.com/SyedWasiHaider/vue-highlightable-input#range-object).  | Yes |
 | highlightEnabled  | No     |  Boolean   | true        | If true, will highlight the text | Yes |
 | highlightStyle  | No | String  | background-color:yellow     | If no style is provided for text, this will act as the global styling for the highlight. | Yes
 | highlightDelay  | No | Number  | 500     | Determines how long in milliseconds to wait before processing the highlights. Setting this to a low value is fine for small text but setting it higher may improve performance significantly for larger text | Yes
@@ -90,12 +90,6 @@ The range end is exlusive in other words ==> [start, end)
 | @input     | Just like a regular input html element you can use this to react to input events
 
 Note, that you can also you `v-model`
-
-## TODO:
-
-- Improve performance with large text
-- Add select and highlight 
-- Regex support
 
 ### Some notes
 

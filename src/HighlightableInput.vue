@@ -86,8 +86,8 @@ export default {
 
     handleChange() {
       this.debouncedHandler = debounce(function(){
-      if (this.internalValue !== this.$el.innerText){
-        this.internalValue = this.$el.innerText
+      if (this.internalValue !== this.$el.textContent){
+        this.internalValue = this.$el.textContent
         this.processHighlights();
       }
       }, this.highlightDelay)
@@ -161,6 +161,12 @@ export default {
         // In case we exited the loop early
         if (startingPosition < this.internalValue.length)
           result += this.safe_tags_replace(this.internalValue.substring(startingPosition, this.internalValue.length))
+
+        // Stupid firefox bug
+        if (result[result.length-1] == ' '){
+          result = result.substring(0, result.length-1)
+          result += '&nbsp;'
+        }
 
         this.htmlOutput = result
         this.$emit('input', this.internalValue)

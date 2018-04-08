@@ -58,7 +58,7 @@ export default {
       msg: '',
       defaultStyle: 'background-color:yellow',
       highlight: [
-        {text:'hackernews', style:"background-color:#ff6600"},
+        {text:'hacker news', style:"background-color:#ff6600"},
         {text:'CASEsensitive', style:"background-color:#fca88f", caseSensitive: true},
         {text:'@Soup', style:"background-color:#bbe4cb"},
         {text:'comic-sans', style:"font-family:comic-sans"},
@@ -74,7 +74,9 @@ export default {
   },
   methods: {
     handleNewHighlights () {
-        this.highlight.unshift(this.customHighlight)
+        var h = this.customHighlight//.trim()
+        if (h.length > 0)
+          this.highlight.unshift(h)
         this.customHighlight = ""
     }
   }
