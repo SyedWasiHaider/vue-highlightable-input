@@ -74,7 +74,9 @@ export default {
   },
   methods: {
     handleNewHighlights () {
-        var h = this.customHighlight//.trim()
+        // Ugly hack because chrome is stupid 
+        // https://stackoverflow.com/questions/26962323/what-is-this-insane-space-character-google-chrome
+        var h = this.customHighlight.replace(new RegExp(String.fromCharCode(32),"g"),String.fromCharCode(160));
         if (h.length > 0)
           this.highlight.unshift(h)
         this.customHighlight = ""
