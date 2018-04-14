@@ -4,6 +4,7 @@
           <img height="160px" width="250px" src="../assets/logo.png">
 
           <h3> Highlight and style specific words as you're typing. </h3>
+          
           <highlightable-input 
             align="left"
             class="myinput" 
@@ -15,6 +16,14 @@
             v-model="msg"
           />
           
+          <label> Raw Text: </label>
+          <br><br>
+          <label>{{msg}} </label>
+          <br><br>
+
+          <button v-on:click="msg = ''">Clear Text</button>
+          <br><br>
+
           <label>
             <input type="checkbox" v-model="highlightEnabled"> Highlight
           </label>
@@ -22,8 +31,8 @@
           <label>
             <input type="checkbox" v-model="caseEnabled"> Case Sensitive (Global)
           </label>
-
           <br><br>
+
           <label> Add your own highlights (Text only but not RegExp) </label>
           <input v-model="customHighlight"  v-on:keyup.13="handleNewHighlights"/>
           <ul>

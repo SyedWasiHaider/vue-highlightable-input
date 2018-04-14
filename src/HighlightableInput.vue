@@ -63,6 +63,7 @@ export default {
 
     value() {
       if (this.internalValue != this.value){
+        this.internalValue = this.value
         this.processHighlights()
       }
     },
@@ -96,9 +97,6 @@ export default {
 
     processHighlights()
     {
-        if (this.typing)
-          return;
-
         if (!this.highlightEnabled)
         {
           this.htmlOutput = this.internalValue;
