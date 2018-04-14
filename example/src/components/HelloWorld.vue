@@ -8,7 +8,7 @@
           <highlightable-input 
             align="left"
             class="myinput" 
-            data-placeholder="Try typing any of the words below like hackernews or @Soup"
+            data-placeholder="Try typing any of the words below like hacker news or @Soup"
             :highlight-style="defaultStyle" 
             :highlight-enabled="highlightEnabled" 
             :highlight="highlight" 

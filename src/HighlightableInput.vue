@@ -38,6 +38,10 @@ export default {
     fireOn : {
       type: String,
       default: 'keydown'
+    },
+    fireOnEnabled : {
+      type: Boolean,
+      default: true
     }
   },
   data() { 
@@ -48,7 +52,8 @@ export default {
     } 
   },
   mounted () {
-    this.$el.addEventListener(this.fireOn, this.handleChange)
+      if (this.fireOnEnabled)
+        this.$el.addEventListener(this.fireOn, this.handleChange)
   },
 
   watch: {
