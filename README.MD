@@ -62,6 +62,7 @@ export default {
 | caseSensitive  | No | Boolean  | false     | If true, will treat highlight strings with case sensitivity. Can be overrided per highlight object. | Yes
 | value | No | String   | null        | Raw text value. | Yes
 | fireOn | No | String   | keydown        | The dom event on which the highlight event should be fired. This can be any event that the div content editable can handle. | No (only because the listener is being added in mounted)
+| fireOnEnabled | No | Boolean   | true        | If true, will process the highlights on the specified (or default) event. | No (only because the value is used in the mounted function)
 
 #### Highlight Object
 ```javascript

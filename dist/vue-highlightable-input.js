@@ -1300,6 +1300,10 @@ var HighlightableInput = {render: function(){var _vm=this;var _h=_vm.$createElem
     fireOn : {
       type: String,
       default: 'keydown'
+    },
+    fireOnEnabled : {
+      type: Boolean,
+      default: true
     }
   },
   data() { 
@@ -1310,7 +1314,8 @@ var HighlightableInput = {render: function(){var _vm=this;var _h=_vm.$createElem
     } 
   },
   mounted () {
-    this.$el.addEventListener(this.fireOn, this.handleChange);
+      if (this.fireOnEnabled)
+        this.$el.addEventListener(this.fireOn, this.handleChange);
   },
 
   watch: {
@@ -1325,6 +1330,7 @@ var HighlightableInput = {render: function(){var _vm=this;var _h=_vm.$createElem
 
     value() {
       if (this.internalValue != this.value){
+        this.internalValue = this.value;
         this.processHighlights();
       }
     },
@@ -1358,9 +1364,6 @@ var HighlightableInput = {render: function(){var _vm=this;var _h=_vm.$createElem
 
     processHighlights()
     {
-        if (this.typing)
-          return;
-
         if (!this.highlightEnabled)
         {
           this.htmlOutput = this.internalValue;
