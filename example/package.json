@@ -5,7 +5,9 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "teardown": "surge teardown https://vue-highlightable-input.surge.sh/",
+    "deploy": "surge ./dist --domain https://vue-highlightable-input.surge.sh/"
   },
   "dependencies": {
     "vue": "^2.5.16",
