@@ -54,6 +54,8 @@ export default {
   mounted () {
       if (this.fireOnEnabled)
         this.$el.addEventListener(this.fireOn, this.handleChange)
+      this.internalValue = this.value
+      this.processHighlights()
   },
 
   watch: {
@@ -273,7 +275,10 @@ export default {
     saveSelection(containerEl){
        var start;
       if (window.getSelection && document.createRange) {
-          var range = window.getSelection().getRangeAt(0);
+          var selection = window.getSelection()
+          if (!selection || selection.rangeCount == 0)
+            return
+          var range = selection.getRangeAt(0);
           var preSelectionRange = range.cloneRange();
           preSelectionRange.selectNodeContents(containerEl);
           preSelectionRange.setEnd(range.startContainer, range.startOffset);
@@ -299,6 +304,10 @@ export default {
 
       // Copied but modifed slightly from: https://stackoverflow.com/questions/14636218/jquery-convert-text-url-to-link-as-typing/14637351#14637351
       restoreSelection(containerEl, savedSel){
+
+          if (!savedSel)
+            return
+
           if (window.getSelection && document.createRange) {
               var charIndex = 0, range = document.createRange();
               range.setStart(containerEl, 0);
