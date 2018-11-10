@@ -90,7 +90,7 @@ The range end is exlusive in other words ==> [start, end)
 | ---        | ---      |
 | @input     | Just like a regular input html element you can use this to react to input events
 
-Note, that you can also you `v-model`
+Note, that you can also use `v-model`
 
 ### Some notes
 
