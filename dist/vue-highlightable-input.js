@@ -1282,8 +1282,8 @@ var HighlightableInput = {render: function(){var _vm=this;var _h=_vm.$createElem
     highlight: Array,
     value: String,
     highlightStyle: {
-      type : String,
-      default:    'background-color:yellow'
+      type : [String, Object],
+      default:  'background-color:yellow'
     },
     highlightEnabled: {
       type: Boolean,
@@ -1316,6 +1316,8 @@ var HighlightableInput = {render: function(){var _vm=this;var _h=_vm.$createElem
   mounted () {
       if (this.fireOnEnabled)
         this.$el.addEventListener(this.fireOn, this.handleChange);
+      this.internalValue = this.value;
+      this.processHighlights();
   },
 
   watch: {
@@ -1419,7 +1421,7 @@ var HighlightableInput = {render: function(){var _vm=this;var _h=_vm.$createElem
         for (var k = 0; k < highlightPositions.length; k++){
             var position = highlightPositions[k];
             result += this.safe_tags_replace(this.internalValue.substring(startingPosition, position.start));
-            result += "<span style='" + (highlightPositions[k].style || this.highlightStyle) + "'>" + this.safe_tags_replace(this.internalValue.substring(position.start, position.end + 1)) + "</span>";
+            result += "<span style='" + highlightPositions[k].style + "'>" + this.safe_tags_replace(this.internalValue.substring(position.start, position.end + 1)) + "</span>";
             startingPosition = position.end + 1;
         }
 
@@ -1460,16 +1462,18 @@ var HighlightableInput = {render: function(){var _vm=this;var _h=_vm.$createElem
         return [{text: this.highlight}]
       
       if (Object.prototype.toString.call(this.highlight) === '[object Array]' && this.highlight.length > 0){
+
+        var globalDefaultStyle = typeof(this.highlightStyle) == 'string' ? this.highlightStyle : (Object.keys(this.highlightStyle).map(key => key + ':' + this.highlightStyle[key]).join(';') + ';');
         return this.highlight.map(h => {
           if (h.text || typeof(h) == "string" || Object.prototype.toString.call(h) === '[object RegExp]') {
             return {
               text:   h.text || h,
-              style:  h.style || this.highlightStyle,
+              style:  h.style || globalDefaultStyle,
               caseSensitive: h.caseSensitive
             }
           }else if (h.start && h.end) {
              return {
-              style:  h.style || this.highlightStyle,
+              style:  h.style || globalDefaultStyle,
               start: h.start,
               end:   h.end,
               caseSensitive: h.caseSensitive
@@ -1535,7 +1539,10 @@ var HighlightableInput = {render: function(){var _vm=this;var _h=_vm.$createElem
     saveSelection(containerEl){
        var start;
       if (window.getSelection && document.createRange) {
-          var range = window.getSelection().getRangeAt(0);
+          var selection = window.getSelection();
+          if (!selection || selection.rangeCount == 0)
+            return
+          var range = selection.getRangeAt(0);
           var preSelectionRange = range.cloneRange();
           preSelectionRange.selectNodeContents(containerEl);
           preSelectionRange.setEnd(range.startContainer, range.startOffset);
@@ -1561,6 +1568,10 @@ var HighlightableInput = {render: function(){var _vm=this;var _h=_vm.$createElem
 
       // Copied but modifed slightly from: https://stackoverflow.com/questions/14636218/jquery-convert-text-url-to-link-as-typing/14637351#14637351
       restoreSelection(containerEl, savedSel){
+
+          if (!savedSel)
+            return
+
           if (window.getSelection && document.createRange) {
               var charIndex = 0, range = document.createRange();
               range.setStart(containerEl, 0);

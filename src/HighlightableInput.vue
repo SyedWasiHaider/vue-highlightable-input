@@ -20,8 +20,8 @@ export default {
     highlight: Array,
     value: String,
     highlightStyle: {
-      type : String,
-      default:    'background-color:yellow'
+      type : [String, Object],
+      default:  'background-color:yellow'
     },
     highlightEnabled: {
       type: Boolean,
@@ -159,7 +159,7 @@ export default {
         for (var k = 0; k < highlightPositions.length; k++){
             var position = highlightPositions[k]
             result += this.safe_tags_replace(this.internalValue.substring(startingPosition, position.start))
-            result += "<span style='" + (highlightPositions[k].style || this.highlightStyle) + "'>" + this.safe_tags_replace(this.internalValue.substring(position.start, position.end + 1)) + "</span>"
+            result += "<span style='" + highlightPositions[k].style + "'>" + this.safe_tags_replace(this.internalValue.substring(position.start, position.end + 1)) + "</span>"
             startingPosition = position.end + 1
         }
 
@@ -200,16 +200,18 @@ export default {
         return [{text: this.highlight}]
       
       if (Object.prototype.toString.call(this.highlight) === '[object Array]' && this.highlight.length > 0){
+
+        var globalDefaultStyle = typeof(this.highlightStyle) == 'string' ? this.highlightStyle : (Object.keys(this.highlightStyle).map(key => key + ':' + this.highlightStyle[key]).join(';') + ';')
         return this.highlight.map(h => {
           if (h.text || typeof(h) == "string" || Object.prototype.toString.call(h) === '[object RegExp]') {
             return {
               text:   h.text || h,
-              style:  h.style || this.highlightStyle,
+              style:  h.style || globalDefaultStyle,
               caseSensitive: h.caseSensitive
             }
           }else if (h.start && h.end) {
              return {
-              style:  h.style || this.highlightStyle,
+              style:  h.style || globalDefaultStyle,
               start: h.start,
               end:   h.end,
               caseSensitive: h.caseSensitive

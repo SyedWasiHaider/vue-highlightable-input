@@ -65,7 +65,7 @@ export default {
   data() {
     return {
       msg: 'A bold new future hacker news',
-      defaultStyle: 'background-color:yellow',
+      defaultStyle: { 'background-color' : 'purple', 'color' : 'white' },
       highlight: [
         {text:'hacker news', style:"background-color:#ff6600"},
         {text:'CASEsensitive', style:"background-color:#fca88f", caseSensitive: true},
