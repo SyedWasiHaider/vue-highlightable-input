@@ -209,7 +209,7 @@ export default {
               style:  h.style || globalDefaultStyle,
               caseSensitive: h.caseSensitive
             }
-          }else if (h.start && h.end) {
+          }else if (h.start!=undefined && h.end!=undefined) {
              return {
               style:  h.style || globalDefaultStyle,
               start: h.start,
