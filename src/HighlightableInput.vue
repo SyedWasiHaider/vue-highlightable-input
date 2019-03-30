@@ -143,7 +143,7 @@ export default {
           }
 
 
-          if (highlightObj.start && highlightObj.end && highlightObj.start < highlightObj.end){
+          if (highlightObj.start!=undefined && highlightObj.end!=undefined && highlightObj.start < highlightObj.end){
             var start = highlightObj.start;
             var end = highlightObj.end - 1;
             this.insertRange(start, end, highlightObj, intervalTree)
