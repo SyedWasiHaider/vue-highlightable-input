@@ -143,7 +143,7 @@ export default {
           }
 
 
-          if (highlightObj.start && highlightObj.end && highlightObj.start < highlightObj.end){
+          if (highlightObj.start!=undefined && highlightObj.end!=undefined && highlightObj.start < highlightObj.end){
             var start = highlightObj.start;
             var end = highlightObj.end - 1;
             this.insertRange(start, end, highlightObj, intervalTree)
@@ -209,7 +209,7 @@ export default {
               style:  h.style || globalDefaultStyle,
               caseSensitive: h.caseSensitive
             }
-          }else if (h.start && h.end) {
+          }else if (h.start!=undefined && h.end!=undefined) {
              return {
               style:  h.style || globalDefaultStyle,
               start: h.start,
