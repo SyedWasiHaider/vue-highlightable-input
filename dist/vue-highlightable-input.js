@@ -1405,7 +1405,7 @@ var HighlightableInput = {render: function(){var _vm=this;var _h=_vm.$createElem
           }
 
 
-          if (highlightObj.start && highlightObj.end && highlightObj.start < highlightObj.end){
+          if (highlightObj.start!=undefined && highlightObj.end!=undefined && highlightObj.start < highlightObj.end){
             var start = highlightObj.start;
             var end = highlightObj.end - 1;
             this.insertRange(start, end, highlightObj, intervalTree);
@@ -1464,14 +1464,17 @@ var HighlightableInput = {render: function(){var _vm=this;var _h=_vm.$createElem
       if (Object.prototype.toString.call(this.highlight) === '[object Array]' && this.highlight.length > 0){
 
         var globalDefaultStyle = typeof(this.highlightStyle) == 'string' ? this.highlightStyle : (Object.keys(this.highlightStyle).map(key => key + ':' + this.highlightStyle[key]).join(';') + ';');
-        return this.highlight.map(h => {
-          if (h.text || typeof(h) == "string" || Object.prototype.toString.call(h) === '[object RegExp]') {
+        
+        var regExpHighlights = this.highlight.filter(x => x == Object.prototype.toString.call(x) === '[object RegExp]');
+        var nonRegExpHighlights = this.highlight.filter(x => x == Object.prototype.toString.call(x) !== '[object RegExp]');
+        return nonRegExpHighlights.map(h => {
+          if (h.text || typeof(h) == "string") {
             return {
               text:   h.text || h,
               style:  h.style || globalDefaultStyle,
               caseSensitive: h.caseSensitive
             }
-          }else if (h.start && h.end) {
+          }else if (h.start!=undefined && h.end!=undefined) {
              return {
               style:  h.style || globalDefaultStyle,
               start: h.start,
@@ -1482,10 +1485,11 @@ var HighlightableInput = {render: function(){var _vm=this;var _h=_vm.$createElem
           else {
             console.error("Please provide a valid highlight object or string");
           }
-        }).sort((a,b) => (a.text && b.text) ? a.text > b.text : ((a.start == b.start ? (a.end < b.end) : (a.start < b.start)))) 
+        }).sort((a,b) => (a.text && b.text) ? a.text > b.text : ((a.start == b.start ? (a.end < b.end) : (a.start < b.start)))).concat(regExpHighlights) 
         // We sort here in ascending order because we want to find highlights for the smaller strings first
         // and then override them later with any overlapping larger strings. So for example:
         // if we have highlights: g and gg and the string "sup gg" should have only "gg" highlighted.
+        // RegExp highlights are not sorted and simply concated (this could be done better  in the future)
       }
 
       console.error("Expected a string or an array of strings");

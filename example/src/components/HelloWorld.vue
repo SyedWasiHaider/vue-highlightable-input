@@ -73,8 +73,12 @@ export default {
         {text:'comic-sans', style:"font-family:comic-sans"},
         {text:'bold', style:"font-weight: bold;"},
         "whatever",
+        {start:0, end:1, style:"border: 3px solid #AAAD21;"},
         {start:3, end:5, style:"border: 2px solid #73AD21;"},
-        {text: /[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}/img, style:"color: white; background-color:#aa2313"} // Phone number regex
+        {text: /[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}/img, style:"color: white; background-color:#aa2313"}, // Phone number regex
+        { text: /{{\w+}}/gm, style: 'color: green;' },
+        { text: /{{.*?}}/gm, style: 'color: red' },
+        { text: /{{\w+/gm, style: 'color: green' },
       ],
       highlightEnabled: true,
       caseEnabled: false,
