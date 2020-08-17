@@ -1,5 +1,5 @@
 <template>
-  <div id="hinput" contenteditable="true" />
+  <div class="hinput" contenteditable="true" />
 </template>
 
 <script>
@@ -93,13 +93,17 @@ export default {
     this.processHighlights()
 
     const _this = this
-    document.getElementById('hinput').addEventListener('compositionstart', function(e) {
-      _this.inputing = true
-    }, false)
-
-    document.getElementById('hinput').addEventListener('compositionend', function(e) {
-      _this.inputing = false
-    }, false)
+    var x = document.getElementsByClassName('hinput')
+    var i
+    for (i = 0; i < x.length; i++) {
+      const item = x[i]
+      item.addEventListener('compositionstart', function(e) {
+        _this.inputing = true
+      }, false)
+      item.addEventListener('compositionend', function(e) {
+        _this.inputing = false
+      }, false)
+    }
   },
 
   methods: {
@@ -359,5 +363,4 @@ export default {
 div {
   min-height: 50px;
 }
-
 </style>
