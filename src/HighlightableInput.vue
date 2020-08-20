@@ -132,33 +132,35 @@ export default {
       // Find the position ranges of the text to highlight
       var highlightPositions = []
       var sortedHighlights = this.normalizedHighlights()
-      if (!sortedHighlights) { return }
+      // if (!sortedHighlights) { return }
 
-      for (var i = 0; i < sortedHighlights.length; i++) {
-        var highlightObj = sortedHighlights[i]
+      if (sortedHighlights) {
+        for (var i = 0; i < sortedHighlights.length; i++) {
+          var highlightObj = sortedHighlights[i]
 
-        var indices = []
-        if (highlightObj.text) {
-          if (typeof (highlightObj.text) === 'string') {
-            indices = this.getIndicesOf(highlightObj.text, this.internalValue, isUndefined(highlightObj.caseSensitive) ? this.caseSensitive : highlightObj.caseSensitive)
-            indices.forEach(start => {
-              var end = start + highlightObj.text.length - 1
-              this.insertRange(start, end, highlightObj, intervalTree)
-            })
+          var indices = []
+          if (highlightObj.text) {
+            if (typeof (highlightObj.text) === 'string') {
+              indices = this.getIndicesOf(highlightObj.text, this.internalValue, isUndefined(highlightObj.caseSensitive) ? this.caseSensitive : highlightObj.caseSensitive)
+              indices.forEach(start => {
+                var end = start + highlightObj.text.length - 1
+                this.insertRange(start, end, highlightObj, intervalTree)
+              })
+            }
+
+            if (Object.prototype.toString.call(highlightObj.text) === '[object RegExp]') {
+              indices = this.getRegexIndices(highlightObj.text, this.internalValue)
+              indices.forEach(pair => {
+                this.insertRange(pair.start, pair.end, highlightObj, intervalTree)
+              })
+            }
           }
 
-          if (Object.prototype.toString.call(highlightObj.text) === '[object RegExp]') {
-            indices = this.getRegexIndices(highlightObj.text, this.internalValue)
-            indices.forEach(pair => {
-              this.insertRange(pair.start, pair.end, highlightObj, intervalTree)
-            })
+          if (highlightObj.start != undefined && highlightObj.end != undefined && highlightObj.start < highlightObj.end) {
+            var start = highlightObj.start
+            var end = highlightObj.end - 1
+            this.insertRange(start, end, highlightObj, intervalTree)
           }
-        }
-
-        if (highlightObj.start != undefined && highlightObj.end != undefined && highlightObj.start < highlightObj.end) {
-          var start = highlightObj.start
-          var end = highlightObj.end - 1
-          this.insertRange(start, end, highlightObj, intervalTree)
         }
       }
 
@@ -235,7 +237,7 @@ export default {
         // RegExp highlights are not sorted and simply concated (this could be done better  in the future)
       }
 
-      console.error('Expected a string or an array of strings')
+      // console.error('Expected a string or an array of strings')
       return null
     },
 
