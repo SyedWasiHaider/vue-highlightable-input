@@ -37,7 +37,7 @@ export default {
     },
     fireOn : {
       type: String,
-      default: 'keydown'
+      default: 'input'
     },
     fireOnEnabled : {
       type: Boolean,
@@ -91,15 +91,20 @@ export default {
   },
   
   methods: {
-
-    handleChange() {
-      this.debouncedHandler = debounce(function(){
-      if (this.internalValue !== this.$el.textContent){
-        this.internalValue = this.$el.textContent
-        this.processHighlights();
+    handleCompositionEnd() {
+      this.handleChange()
+    },
+    handleChange(e = null) {
+      if (e && "inputType" in e && e.inputType === "insertCompositionText") {
+        return;
       }
-      }, this.highlightDelay)
-      this.debouncedHandler();
+      this.debouncedHandler = debounce(function(){
+        if (this.internalValue !== this.$el.textContent){
+          this.internalValue = this.$el.textContent
+          this.processHighlights();
+          }
+        }, this.highlightDelay)
+        this.debouncedHandler();
     },
 
     processHighlights()
