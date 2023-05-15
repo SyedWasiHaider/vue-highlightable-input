@@ -63,6 +63,7 @@ export default {
 | value | No | String   | null        | Raw text value. | Yes
 | fireOn | No | String   | keydown        | The dom event on which the highlight event should be fired. This can be any event that the div content editable can handle. | No (only because the listener is being added in mounted)
 | fireOnEnabled | No | Boolean   | true        | If true, will process the highlights on the specified (or default) event. | No (only because the value is used in the mounted function)
+| multiLineMode | No | Boolean   | true        | If true, newlines will be allowed (functions more so as a textarea). If false, enter keys will not register as new lines (more like a form input) | yes
 
 #### Highlight Object
 ```javascript
