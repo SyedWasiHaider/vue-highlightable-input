@@ -1,5 +1,7 @@
 <template>
-  <div contenteditable="true">
+  <div 
+    @keydown.enter="handleEnterKey"
+    contenteditable="true">
   </div>
 </template>
 
@@ -39,10 +41,14 @@ export default {
       type: String,
       default: 'keydown'
     },
-    fireOnEnabled : {
+    fireOnEnabled: {
       type: Boolean,
       default: true
-    }
+    },
+    multiLineMode: {
+      type: Boolean,
+      default: true,
+    },
   },
   data() { 
     return {
@@ -91,6 +97,11 @@ export default {
   },
   
   methods: {
+    handleEnterKey($event) {
+      if (!this.multiLineMode) {
+        $event.preventDefault();
+      }
+    },
 
     handleChange() {
       this.debouncedHandler = debounce(function(){
